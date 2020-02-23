@@ -31,6 +31,9 @@ from unittest import TestCase
 from smart_env import ENV
 
 
+__all__ = ('EnvWithTypeCastTestCase',)
+
+
 class EnvWithTypeCastTestCase(TestCase):
     """Test case for ENV with automatic type cast enabled"""
 

@@ -27,6 +27,9 @@ import unittest
 from smart_env import ENV
 
 
+__all__ = ('EnvTestCase',)
+
+
 class EnvTestCase(unittest.TestCase):
     """Tests for ENV class itself"""
 

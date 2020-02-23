@@ -29,6 +29,9 @@ from unittest import TestCase
 from smart_env import ENV
 
 
+__all__ = ('EnvGeneralTestCase',)
+
+
 class EnvGeneralTestCase(TestCase):
     """Test case for basic tests of ENV class"""
 
