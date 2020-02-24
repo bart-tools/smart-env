@@ -84,18 +84,11 @@ class EnvWithTypeCastTestCase(TestCase):
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), ['Hello', ['world']])
 
-    def test_006_retrieve_dict(self):
+    def test_006_retrieve_dict_with_double_quotes(self):
         value = {"key": "value",
                  "another_key": ["value", "value2", {"key1": "value1"}]}
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), value)
-
-        # additional test for single quotes
-
-        value = "{'key': 'value', \"key2\": \"value\"}"
-        self.setup_value(value)
-        self.assertEqual(getattr(ENV, self.KEY),
-                         {'key': 'value', "key2": "value"})
 
     def test_007_retrieve_tuple(self):
         value = '("1", "2", "3")'
@@ -112,3 +105,9 @@ class EnvWithTypeCastTestCase(TestCase):
     def test_009_retrieve_variable_not_set(self):
         self.assertIsNone(
             getattr(ENV, "YET_ANOTHER_VAR_{}".format(int(time.time()))))
+
+    def test_010_retrieve_dict_with_single_quotes(self):
+        value = "{'key': 'value', \"key2\": \"value\"}"
+        self.setup_value(value)
+        self.assertEqual(getattr(ENV, self.KEY),
+                         {'key': 'value', "key2": "value"})
