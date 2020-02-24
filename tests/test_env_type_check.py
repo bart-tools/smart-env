@@ -26,15 +26,16 @@ import json
 import os
 import sys
 import time
-from unittest import TestCase
+import unittest
 
 from smart_env import ENV
+from smart_env.util import is_python2_running
 
 
 __all__ = ('EnvWithTypeCastTestCase',)
 
 
-class EnvWithTypeCastTestCase(TestCase):
+class EnvWithTypeCastTestCase(unittest.TestCase):
     """Test case for ENV with automatic type cast enabled"""
 
     KEY = "VALUE_WITH_TYPE"
@@ -95,9 +96,9 @@ class EnvWithTypeCastTestCase(TestCase):
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), ("1", "2", "3"))
 
+    @unittest.skipIf(is_python2_running(),
+                     "Set are not supported for Python 2")
     def test_008_retrieve_set(self):
-        if sys.version_info[0] == 2:
-            self.skipTest("Set are not supported for Python 2")
         value = '{"1", "2", "3"}'
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), {"1", "2", "3"})
