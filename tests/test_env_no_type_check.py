@@ -61,4 +61,4 @@ class EnvGeneralTestCase(TestCase):
         is None in ENV"""
 
         param_name = self.generate_param_name()
-        self.assertEqual(getattr(ENV, param_name), None)
+        self.assertIsNone(getattr(ENV, param_name))

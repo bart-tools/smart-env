@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 import json
 import os
-import sys
 import time
 import unittest
 
@@ -63,27 +62,21 @@ class EnvWithTypeCastTestCase(unittest.TestCase):
     def test_003_retrieve_bool_value(self):
         for value in (True, "true", "True"):
             self.setup_value(value)
-            self.assertEqual(getattr(ENV, self.KEY), True)
+            self.assertTrue(getattr(ENV, self.KEY))
 
         for value in (False, "false", "False"):
             self.setup_value(value)
-            self.assertEqual(getattr(ENV, self.KEY), False)
+            self.assertFalse(getattr(ENV, self.KEY))
 
     def test_004_retrieve_integer_value(self):
         for value in (0, -1, 100500, "-20", "10"):
             self.setup_value(value)
             self.assertEqual(getattr(ENV, self.KEY), int(value))
 
-    def test_005_retrieve_list(self):
+    def test_005_retrieve_list_with_double_quotes(self):
         value = ["Hello", "Smart", "Env", ["with", "nested", "list"]]
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), value)
-
-        # additional test for single quotes
-
-        value = "['Hello', ['world']]"
-        self.setup_value(value)
-        self.assertEqual(getattr(ENV, self.KEY), ['Hello', ['world']])
 
     def test_006_retrieve_dict_with_double_quotes(self):
         value = {"key": "value",
@@ -112,3 +105,8 @@ class EnvWithTypeCastTestCase(unittest.TestCase):
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY),
                          {'key': 'value', "key2": "value"})
+
+    def test_011_retrieve_list_with_single_quotes(self):
+        value = "['Hello', ['world']]"
+        self.setup_value(value)
+        self.assertEqual(getattr(ENV, self.KEY), ['Hello', ['world']])

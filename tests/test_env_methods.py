@@ -43,11 +43,16 @@ class EnvTestCase(unittest.TestCase):
 
     def test_002_changing_type_cast(self):
         """Check if enabling type cast works"""
+
         self.assertFalse(ENV.__dict__['_auto_type_cast'])
         self.assertFalse(ENV.is_auto_type_cast())
+
         ENV.enable_automatic_type_cast()
+
         self.assertTrue(ENV.__dict__['_auto_type_cast'])
         self.assertTrue(ENV.is_auto_type_cast())
+
         ENV.disable_automatic_type_cast()
+
         self.assertFalse(ENV.__dict__['_auto_type_cast'])
         self.assertFalse(ENV.is_auto_type_cast())
