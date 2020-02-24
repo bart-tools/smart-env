@@ -77,12 +77,16 @@ Supported environments:
 1. Old versions of Python in both generations (e.g. 2.6, 3.4, etc) will never be supported. 
 However, you always can implement such support in your forks.
 
-2. Parsing set() objects is not working in Python 2. See https://bugs.python.org/issue10091 for details.
+2. Parsing set() objects is not working in Python 2. See [this](https://bugs.python.org/issue10091) for details.
 
 
 ## Authors
 
 * **Alex Sokolov** - *Author* - [Albartash](https://github.com/AlBartash)
+
+## Contacts
+
+* Telegram channel with updates: [@bart_tools](http://t.me/bart_tools)
 
 ## License
 
