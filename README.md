@@ -61,6 +61,11 @@ Also it's possible to run tests using Tox:
 tox -e <env>
 ```
 
+Tests coverage is one of the important goals of this project.
+For now coverage is next:
+- For Python 2.7: 98%
+- For Python 3.x: 96%
+
 Supported environments:
 
 - py27
