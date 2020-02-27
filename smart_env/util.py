@@ -22,37 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import unittest
-
-from smart_env import ENV
+from sys import version_info
 
 
-__all__ = ('EnvTestCase',)
+__all__ = ('is_python2_running',)
 
 
-class EnvTestCase(unittest.TestCase):
-    """Tests for ENV class itself"""
+def __get_python_version():
+    """Retrieve current Python X.Y version as (X, Y)"""
+    return version_info[0:2]
 
-    def test_001_own_fields(self):
-        """Check if all own fields work"""
 
-        for name in ('enable_automatic_type_cast',
-                     'disable_automatic_type_cast',
-                     'is_auto_type_cast'):
-            getattr(ENV, name)
-
-    def test_002_changing_type_cast(self):
-        """Check if enabling type cast works"""
-
-        self.assertFalse(ENV.__dict__['_auto_type_cast'])
-        self.assertFalse(ENV.is_auto_type_cast())
-
-        ENV.enable_automatic_type_cast()
-
-        self.assertTrue(ENV.__dict__['_auto_type_cast'])
-        self.assertTrue(ENV.is_auto_type_cast())
-
-        ENV.disable_automatic_type_cast()
-
-        self.assertFalse(ENV.__dict__['_auto_type_cast'])
-        self.assertFalse(ENV.is_auto_type_cast())
+def is_python2_running():
+    """Check if current interpreter is Python 2.x"""
+    return __get_python_version()[0] == 2

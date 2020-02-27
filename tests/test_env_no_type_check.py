@@ -29,6 +29,9 @@ from unittest import TestCase
 from smart_env import ENV
 
 
+__all__ = ('EnvGeneralTestCase',)
+
+
 class EnvGeneralTestCase(TestCase):
     """Test case for basic tests of ENV class"""
 
@@ -58,4 +61,4 @@ class EnvGeneralTestCase(TestCase):
         is None in ENV"""
 
         param_name = self.generate_param_name()
-        self.assertEqual(getattr(ENV, param_name), None)
+        self.assertIsNone(getattr(ENV, param_name))

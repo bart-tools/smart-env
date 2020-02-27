@@ -24,14 +24,17 @@ THE SOFTWARE.
 
 import json
 import os
-import sys
 import time
-from unittest import TestCase
+import unittest
 
 from smart_env import ENV
+from smart_env.util import is_python2_running
 
 
-class EnvWithTypeCastTestCase(TestCase):
+__all__ = ('EnvWithTypeCastTestCase',)
+
+
+class EnvWithTypeCastTestCase(unittest.TestCase):
     """Test case for ENV with automatic type cast enabled"""
 
     KEY = "VALUE_WITH_TYPE"
@@ -59,49 +62,36 @@ class EnvWithTypeCastTestCase(TestCase):
     def test_003_retrieve_bool_value(self):
         for value in (True, "true", "True"):
             self.setup_value(value)
-            self.assertEqual(getattr(ENV, self.KEY), True)
+            self.assertTrue(getattr(ENV, self.KEY))
 
         for value in (False, "false", "False"):
             self.setup_value(value)
-            self.assertEqual(getattr(ENV, self.KEY), False)
+            self.assertFalse(getattr(ENV, self.KEY))
 
     def test_004_retrieve_integer_value(self):
         for value in (0, -1, 100500, "-20", "10"):
             self.setup_value(value)
             self.assertEqual(getattr(ENV, self.KEY), int(value))
 
-    def test_005_retrieve_list(self):
+    def test_005_retrieve_list_with_double_quotes(self):
         value = ["Hello", "Smart", "Env", ["with", "nested", "list"]]
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), value)
 
-        # additional test for single quotes
-
-        value = "['Hello', ['world']]"
-        self.setup_value(value)
-        self.assertEqual(getattr(ENV, self.KEY), ['Hello', ['world']])
-
-    def test_006_retrieve_dict(self):
+    def test_006_retrieve_dict_with_double_quotes(self):
         value = {"key": "value",
                  "another_key": ["value", "value2", {"key1": "value1"}]}
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), value)
-
-        # additional test for single quotes
-
-        value = "{'key': 'value', \"key2\": \"value\"}"
-        self.setup_value(value)
-        self.assertEqual(getattr(ENV, self.KEY),
-                         {'key': 'value', "key2": "value"})
 
     def test_007_retrieve_tuple(self):
         value = '("1", "2", "3")'
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), ("1", "2", "3"))
 
+    @unittest.skipIf(is_python2_running(),
+                     "Set are not supported for Python 2")
     def test_008_retrieve_set(self):
-        if sys.version_info[0] == 2:
-            self.skipTest("Set are not supported for Python 2")
         value = '{"1", "2", "3"}'
         self.setup_value(value)
         self.assertEqual(getattr(ENV, self.KEY), {"1", "2", "3"})
@@ -109,3 +99,14 @@ class EnvWithTypeCastTestCase(TestCase):
     def test_009_retrieve_variable_not_set(self):
         self.assertIsNone(
             getattr(ENV, "YET_ANOTHER_VAR_{}".format(int(time.time()))))
+
+    def test_010_retrieve_dict_with_single_quotes(self):
+        value = "{'key': 'value', \"key2\": \"value\"}"
+        self.setup_value(value)
+        self.assertEqual(getattr(ENV, self.KEY),
+                         {'key': 'value', "key2": "value"})
+
+    def test_011_retrieve_list_with_single_quotes(self):
+        value = "['Hello', ['world']]"
+        self.setup_value(value)
+        self.assertEqual(getattr(ENV, self.KEY), ['Hello', ['world']])

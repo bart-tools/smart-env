@@ -28,6 +28,9 @@ import unittest
 from smart_env.decoders import IDecoder
 
 
+__all__ = ('DecoderTestCase',)
+
+
 class FakeDecoder(IDecoder):
     """Fake decoder class to test IDecoder class"""
 
