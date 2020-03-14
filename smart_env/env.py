@@ -22,12 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import json
 import os
 
 from six import with_metaclass
 
 from .decoders import SUPPORTED_DECODERS
 from .exceptions import DecodeError
+from .iterator import EnvIterator
 
 
 __all__ = ('ENV',)
@@ -123,6 +125,23 @@ class ClassProperty(type):
             return False
 
         return os.environ.get(item, None) is not None
+
+    def __str__(cls):
+        """Returns a string representation of os.environ object.
+
+        In this case, values are not decoded from their string equivalents
+        in the OS environment. For convenience, json.dumps() is used.
+        """
+
+        return json.dumps(dict(os.environ))
+
+    def __repr__(cls):
+        """Returns a string with sorted list of environment variables"""
+
+        return str(sorted(os.environ.keys()))
+
+    def __iter__(self):
+        return EnvIterator(sorted(os.environ.keys()))
 
 
 class ENV(with_metaclass(ClassProperty)):
