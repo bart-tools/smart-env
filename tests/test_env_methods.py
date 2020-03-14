@@ -98,3 +98,50 @@ class EnvTestCase(unittest.TestCase):
 
         setattr(ENV, variable_name, variable_value)
         self.assertEqual(getattr(ENV, variable_name), variable_value)
+
+
+class ENVRepresentationTestCase(unittest.TestCase):
+    """Test cases for representations of ENV class"""
+
+    def setUp(self):
+        """Erase environment before running tests"""
+
+        for var in ENV:
+            setattr(ENV, var, None)
+
+    def test_001_test_str_method(self):
+        """Check __str__() method of ENV class"""
+
+        variable_name = "STR_VAR_{}".format(int(time()))
+        variable_value = str(time())
+
+        setattr(ENV, variable_name, variable_value)
+
+        env_string = '{"%s": "%s"}' % (variable_name, variable_value)
+        self.assertEqual(str(ENV), env_string)
+
+    def test_002_repr_method(self):
+        """Check __repr__() method of ENV class"""
+
+        variable_name_1 = "STR_VAR_1"
+        variable_name_2 = "STR_VAR_2"
+        variable_value = "Something"
+
+        setattr(ENV, variable_name_2, variable_value)
+        setattr(ENV, variable_name_1, variable_value)
+
+        env_string = "['{}', '{}']".format(
+            variable_name_1, variable_name_2
+        )
+        self.assertEqual(repr(ENV), env_string)
+
+    def test_003_iterate_environment(self):
+        """Check iteration of environment variables"""
+
+        var_names = ["VAR_{}".format(i) for i in range(5)]
+        for var in var_names:
+            setattr(ENV, var, 'value')
+
+        var_names_cmp = [name for name in ENV]
+
+        self.assertEqual(var_names, var_names_cmp)
