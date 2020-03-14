@@ -27,7 +27,7 @@ import abc
 from six import with_metaclass
 
 
-__all__ = ('DecodeError', 'EnvException')
+__all__ = ('DecodeError', 'EncodeError', 'EnvException')
 
 
 class EnvException(with_metaclass(abc.ABCMeta, Exception)):
@@ -36,3 +36,7 @@ class EnvException(with_metaclass(abc.ABCMeta, Exception)):
 
 class DecodeError(EnvException):
     """Error while trying to decode value with type checking"""
+
+
+class EncodeError(EnvException):
+    """Error while trying to encode value"""
