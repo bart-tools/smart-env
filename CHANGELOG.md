@@ -6,6 +6,7 @@
 * Added support for dir(ENV)
 * Implemented str(ENV) and repr(ENV)
 * Added support for iterating ENV
+* Increased test coverage on Python 3 to 97%
 
 ### 2020-02-29 - v.1.0.1
 
