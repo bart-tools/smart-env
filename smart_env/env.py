@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import itertools
 import json
 import os
 
@@ -142,6 +143,15 @@ class ClassProperty(type):
 
     def __iter__(self):
         return EnvIterator(sorted(os.environ.keys()))
+
+    def __dir__(self):
+        """Returns list of environment variables + own fields"""
+
+        return sorted(
+            itertools.chain(self.__own_fields__,
+                            os.environ.keys()
+            )
+        )
 
 
 class ENV(with_metaclass(ClassProperty)):
