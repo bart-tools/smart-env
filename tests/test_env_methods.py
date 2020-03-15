@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import itertools
 from time import time
 import unittest
 
@@ -145,3 +146,14 @@ class ENVRepresentationTestCase(unittest.TestCase):
         var_names_cmp = [name for name in ENV]
 
         self.assertEqual(var_names, var_names_cmp)
+
+    def test_004_list_variables(self):
+        variable_name = "STR_VAR_{}".format(int(time()))
+        setattr(ENV, variable_name, 'value')
+        dir_list = sorted(
+            itertools.chain(
+                ENV.__own_fields__, [variable_name]
+            )
+        )
+
+        self.assertEqual(dir(ENV), dir_list)
