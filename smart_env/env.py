@@ -30,6 +30,7 @@ from six import with_metaclass
 
 from .decoders import SUPPORTED_DECODERS
 from .exceptions import DecodeError
+from .exceptions import EncodeError
 from .iterator import EnvIterator
 
 
@@ -73,10 +74,10 @@ class ClassProperty(type):
         for decoder in SUPPORTED_DECODERS:
             try:
                 return decoder.encode(value)
-            except TypeError:
+            except EncodeError:
                 pass
         else:
-            raise ValueError("'{}' value is not serializable")
+            raise ValueError("'{}' value is not serializable".format(value))
 
     def __getattr__(cls, item):
         if item in cls.__own_fields__:
@@ -106,16 +107,12 @@ class ClassProperty(type):
 
         if key in cls.__mutable_fields__:
             super(ClassProperty, cls).__setattr__(key, value)
-            return super(ClassProperty, cls).__getattribute__(key)
 
         if value is None:  # means - unset variable
             delattr(cls, key)
-            return None
+            return
 
         os.environ[key] = cls.__encode(value)
-        if cls._auto_type_cast:
-            return value
-        return os.environ[key]
 
     def __contains__(cls, item):
         """Check if environment variable is set"""

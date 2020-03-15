@@ -75,7 +75,7 @@ class JSONDecoder(IDecoder):
 
         try:
             return json.loads(value)
-        except ValueError:  # To cover exceptions in all Python versions
+        except (TypeError, ValueError):
             raise DecodeError
 
     @classmethod
@@ -92,8 +92,8 @@ class JSONDecoder(IDecoder):
         """
         try:
             return json.dumps(value)
-        except ValueError:
-            raise DecodeError
+        except (TypeError, ValueError):
+            raise EncodeError
 
 
 class BooleanDecoder(IDecoder):
@@ -130,15 +130,16 @@ class BooleanDecoder(IDecoder):
         True -> true
         False -> false
         """
-
-        if not isinstance(value, bool):
-            raise TypeError(
-                "Expected boolean value, got '{}' instead".format(
-                    type(value)
+        try:
+            if not isinstance(value, bool):
+                raise TypeError(
+                    "Expected boolean value, got '{}' instead".format(
+                        type(value)
+                    )
                 )
-            )
-
-        return json.dumps(value)
+            return json.dumps(value)
+        except (TypeError, ValueError):
+            raise EncodeError
 
 
 class CollectionDecoder(IDecoder):
