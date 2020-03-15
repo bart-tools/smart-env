@@ -22,21 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import abc
+import unittest
 
-from six import with_metaclass
-
-
-__all__ = ('DecodeError', 'EncodeError', 'EnvException')
+from smart_env.iterator import EnvIterator
 
 
-class EnvException(with_metaclass(abc.ABCMeta, Exception)):
-    """Base class for Environment exceptions"""
+__all__ = ('EnvIteratorTestCase',)
 
 
-class DecodeError(EnvException):
-    """Error while trying to decode value with type checking"""
+class EnvIteratorTestCase(unittest.TestCase):
+    """Test case for utils"""
 
+    def test_iterator_with_valid_parameter(self):
+        """Check that iterator can be created with valid parameter"""
 
-class EncodeError(EnvException):
-    """Error while trying to encode value"""
+        for value in ({'a': 'b'},
+                      [1, 2],
+                      {3, 4},
+                      frozenset(),
+                      (i for i in range(5))
+                      ):
+            for _ in EnvIterator(value):
+                pass
+
+    def test_iterator_with_invalid_parameter(self):
+        """Check that iterator can't be created with invalid parameter"""
+
+        for value in (object(), 'value', 1, 1.2, True):
+            with self.assertRaises(TypeError):
+                for _ in EnvIterator(value):
+                    pass

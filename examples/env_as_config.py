@@ -22,21 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import abc
+# Imagine you have a web application written with popular frameworks
+# (Django, Flask, etc). If so, your settings.py would look like this.
 
-from six import with_metaclass
-
-
-__all__ = ('DecodeError', 'EncodeError', 'EnvException')
+from smart_env import ENV
 
 
-class EnvException(with_metaclass(abc.ABCMeta, Exception)):
-    """Base class for Environment exceptions"""
+ENV.enable_automatic_type_cast()
 
 
-class DecodeError(EnvException):
-    """Error while trying to decode value with type checking"""
+# This variable now can be checked as-is, without
+# Copy-pasting checks like "var in ('true', 1, etc)".
 
+DEBUG = ENV.DEBUG
 
-class EncodeError(EnvException):
-    """Error while trying to encode value"""
+# These configs might had been stored in a separate Shell or JSON file,
+# and brought to environment just before running your application.
+DATABASES = ENV.DATABASE_CONFIG
+SENTRY_CONFIG = ENV.SENTRY_CONFIG
+
+# This value now can be passed directly into loggin.config.dictConfig()
+LOGGING_CONFIG = ENV.LOGGING_CONFIG

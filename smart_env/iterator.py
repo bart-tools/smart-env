@@ -22,21 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import abc
-
-from six import with_metaclass
-
-
-__all__ = ('DecodeError', 'EncodeError', 'EnvException')
+from collections import Iterable
+from collections import Iterator
 
 
-class EnvException(with_metaclass(abc.ABCMeta, Exception)):
-    """Base class for Environment exceptions"""
+__all__ = ('EnvIterator',)
 
 
-class DecodeError(EnvException):
-    """Error while trying to decode value with type checking"""
+class EnvIterator(Iterator):
+    """Iterator for environment variables"""
 
+    def __init__(self, variables):
+        if not (isinstance(variables, Iterable) and
+                not isinstance(variables, str)):
+            raise TypeError('Parameter "variables" must be a collection')
 
-class EncodeError(EnvException):
-    """Error while trying to encode value"""
+        self._variables = variables
+        self._generator = (var for var in self._variables)
+
+    def __next__(self):
+        return next(self._generator)
+
+    next = __next__  # For Python 2

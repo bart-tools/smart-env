@@ -22,21 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import abc
-
-from six import with_metaclass
+from smart_env import ENV
 
 
-__all__ = ('DecodeError', 'EncodeError', 'EnvException')
+ENV.enable_automatic_type_cast()
 
 
-class EnvException(with_metaclass(abc.ABCMeta, Exception)):
-    """Base class for Environment exceptions"""
+# Change current working directory to custom one
+
+ENV.PWD = '/tmp/mydir'
 
 
-class DecodeError(EnvException):
-    """Error while trying to decode value with type checking"""
+# Unset variable even if not exist.
+# No KeyError thrown, like it'd be with os.environ.
+ENV.MY_VAR = None
+# and another way
+del ENV.MY_VAR
 
 
-class EncodeError(EnvException):
-    """Error while trying to encode value"""
+# Check that variable is set
+print(ENV.MY_VAR_2 is not None)
+# and another way
+print('MY_VAR_2' in ENV)
