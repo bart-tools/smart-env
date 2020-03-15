@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import datetime
 import itertools
 from time import time
 import unittest
@@ -99,6 +100,41 @@ class EnvTestCase(unittest.TestCase):
 
         setattr(ENV, variable_name, variable_value)
         self.assertEqual(getattr(ENV, variable_name), variable_value)
+
+    def test_007_try_reinitialize_own_immutable_fields(self):
+        """Check immutability of __immutable_fields__ in ENV"""
+
+        for field in ENV.__immutable_fields__:
+            with self.assertRaises(AttributeError):
+                setattr(ENV, field, 'value')
+
+    def test_008_get_own_fields(self):
+        """Check getting __own__fields__ items"""
+
+        for field in ENV.__own_fields__:
+            self.assertIsNotNone(getattr(ENV, field))
+
+    def test_009_try_delete_own_attribute(self):
+        """Check deletion of __own_fields__ in ENV"""
+
+        for field in ENV.__own_fields__:
+            with self.assertRaises(AttributeError):
+                delattr(ENV, field)
+
+    def test_010_serialize_invalid_value(self):
+        """Check that invalid value cannot be serialized"""
+
+        ENV.enable_automatic_type_cast()
+
+        for value in (datetime.datetime.now(), object()):
+            with self.assertRaises(ValueError):
+                setattr(ENV, 'SOMEVAR', value)
+
+    def test_011_smoke_test_decode(self):
+        """Check method __decode() in ENV"""
+
+        with self.assertRaises(TypeError):
+            ENV._ENV__decode(object())
 
 
 class ENVRepresentationTestCase(unittest.TestCase):

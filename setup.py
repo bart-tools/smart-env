@@ -37,7 +37,7 @@ with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'),
 
 setup(
     name='smart-env',
-    version='1.0.1',
+    version='1.0.2',
     description='Smart Environment Wrapper Library',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -66,5 +66,6 @@ setup(
 
     project_urls={
         'Source': 'https://github.com/bart-tools/smart-env/',
+        'Project': 'https://github.com/bart-tools'
     },
 )

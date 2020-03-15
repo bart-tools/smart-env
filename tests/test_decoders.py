@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import datetime
 import unittest
 
 from smart_env.decoders import BooleanDecoder
@@ -43,14 +44,21 @@ class FakeDecoder(IDecoder):
         """This method will simply call parent method"""
         return super(FakeDecoder, cls).decode(value)
 
+    @classmethod
+    def encode(cls, value):
+        """This method will simply call parent method"""
+        return super(FakeDecoder, cls).encode(value)
+
 
 class DecoderTestCase(unittest.TestCase):
     """Test cases for Decoder classes"""
 
     def test_decoder_interface(self):
         """Check that IDecoder is a true interface"""
-        with self.assertRaises(NotImplementedError):
-            FakeDecoder.decode(None)
+
+        for method in ('decode', 'encode'):
+            with self.assertRaises(NotImplementedError):
+                getattr(FakeDecoder, method)(None)
 
 
 class EncoderTestCase(unittest.TestCase):
@@ -126,3 +134,13 @@ class EncoderTestCase(unittest.TestCase):
                     self.assertIn(output, input_data['output'])
                 else:
                     self.assertEqual(output, input_data['output'])
+
+    def test_encoding_invalid_value(self):
+        """Check that invalid value cannot be encoded"""
+
+        invalid_values = (datetime.datetime.now(), object())
+
+        for decoder in SUPPORTED_DECODERS:
+            for value in invalid_values:
+                with self.assertRaises(EncodeError):
+                    decoder.encode(value)
