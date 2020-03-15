@@ -22,25 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-from collections import Iterable
-from collections import Iterator
+# Imagine you have a web application written with popular frameworks
+# (Django, Flask, etc). If so, your settings.py would look like this.
+
+from smart_env import ENV
 
 
-__all__ = ('EnvIterator',)
+ENV.enable_automatic_type_cast()
 
 
-class EnvIterator(Iterator):
-    """Iterator for environment variables"""
+# This variable now can be checked as-is, without
+# Copy-pasting checks like "var in ('true', 1, etc)".
 
-    def __init__(self, variables):
-        if not (isinstance(variables, Iterable) and
-                not isinstance(variables, str)):
-            raise TypeError('Parameter "variables" must be a collection')
+DEBUG = ENV.DEBUG
 
-        self._variables = variables
-        self._generator = (var for var in self._variables)
+# These configs might had been stored in a separate Shell or JSON file,
+# and brought to environment just before running your application.
+DATABASES = ENV.DATABASE_CONFIG
+SENTRY_CONFIG = ENV.SENTRY_CONFIG
 
-    def __next__(self):
-        return next(self._generator)
-
-    next = __next__  # For Python 2
+# This value now can be passed directly into loggin.config.dictConfig()
+LOGGING_CONFIG = ENV.LOGGING_CONFIG

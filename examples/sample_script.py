@@ -22,25 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-from collections import Iterable
-from collections import Iterator
+from smart_env import ENV
 
 
-__all__ = ('EnvIterator',)
+ENV.enable_automatic_type_cast()
 
 
-class EnvIterator(Iterator):
-    """Iterator for environment variables"""
+# Change current working directory to custom one
 
-    def __init__(self, variables):
-        if not (isinstance(variables, Iterable) and
-                not isinstance(variables, str)):
-            raise TypeError('Parameter "variables" must be a collection')
+ENV.PWD = '/tmp/mydir'
 
-        self._variables = variables
-        self._generator = (var for var in self._variables)
 
-    def __next__(self):
-        return next(self._generator)
+# Unset variable even if not exist.
+# No KeyError thrown, like it'd be with os.environ.
+ENV.MY_VAR = None
+# and another way
+del ENV.MY_VAR
 
-    next = __next__  # For Python 2
+
+# Check that variable is set
+print(ENV.MY_VAR_2 is not None)
+# and another way
+print('MY_VAR_2' in ENV)
