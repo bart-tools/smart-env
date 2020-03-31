@@ -58,7 +58,7 @@ setup(
     ],
 
     keywords='env environ smartenv',
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'examples']),
     python_requires='>=2.7.*, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
     install_requires=[
         "six>=1.14.0"
