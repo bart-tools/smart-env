@@ -37,6 +37,9 @@ from .iterator import EnvIterator
 __all__ = ('ENV',)
 
 
+UNDEFINED = None
+
+
 class ClassProperty(type):
     """Metaclass for enabling properties on class"""
 
@@ -50,7 +53,7 @@ class ClassProperty(type):
     def __decode(value):
         """Decodes data from environment variable if possible,
         or return the source value otherwise"""
-        if value is None:  # Variable was not set in environment
+        if value is UNDEFINED:  # Variable was not set in environment
             return value
 
         if not isinstance(value, str):
@@ -83,8 +86,8 @@ class ClassProperty(type):
         if item in cls.__own_fields__:
             return cls.__dict__[item]
         if cls._auto_type_cast:
-            return cls.__decode(os.environ.get(item, None))
-        return os.environ.get(item, None)
+            return cls.__decode(os.environ.get(item, UNDEFINED))
+        return os.environ.get(item, UNDEFINED)
 
     def __delattr__(cls, item):
         """Unset environment variable"""
@@ -108,7 +111,7 @@ class ClassProperty(type):
         if key in cls.__mutable_fields__:
             super(ClassProperty, cls).__setattr__(key, value)
 
-        if value is None:  # means - unset variable
+        if value is UNDEFINED:  # means - unset variable
             delattr(cls, key)
             return
 
@@ -122,7 +125,7 @@ class ClassProperty(type):
         if item in cls.__own_fields__:
             return False
 
-        return os.environ.get(item, None) is not None
+        return os.environ.get(item, UNDEFINED) is not UNDEFINED
 
     def __str__(cls):
         """Returns a string representation of os.environ object.
