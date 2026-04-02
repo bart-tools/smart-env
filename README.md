@@ -1,5 +1,5 @@
 # THIS REPOSITORY IS NO LONGER MAINTAINED
-New repository is here:  https://github.com/ATCode-space/smart-env
+New repository is here:  https://github.com/ATCode-Solutions/smart-env
 
 # SmartEnv - OS Environment Wrapper Library
 
